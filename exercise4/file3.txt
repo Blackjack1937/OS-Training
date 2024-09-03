@@ -1,0 +1,7 @@
+cat: /var/log/apport.log: Permission non accordée
+cat: /var/log/auth.log: Permission non accordée
+cat: /var/log/boot.log: Permission non accordée
+cat: /var/log/kern.log: Permission non accordée
+cat: /var/log/xrdp.log: Permission non accordée
+cat: /var/log/xrdp-sesman.log: Permission non accordée
+73
