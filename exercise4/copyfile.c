@@ -25,7 +25,6 @@ int main() {
         fputc(ch, destFile);
     }
 
-    // Close the files
     fclose(sourceFile);
     fclose(destFile);
 
