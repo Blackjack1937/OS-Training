@@ -1,34 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 int main() {
-    FILE *sourceFile, *destFile;
-    char ch;
+    int fd;
+    int dest_fd;
+    char buf[512];
+    int nbytes;
 
-    // Open the source file (file1.txt) in read mode
-    sourceFile = fopen("file1.txt", "r");
-    if (sourceFile == NULL) {
-        printf("Error: Could not open file1.txt for reading\n");
+    if ((fd = open("file1.txt", O_RDONLY))< 0) {
+        perror("open");
         exit(1);
     }
 
-    // Open the destination file (file_copy.txt) in write mode
-    destFile = fopen("file_copy.txt", "w");
-    if (destFile == NULL) {
-        printf("Error: Could not open file_copy.txt for writing\n");
-        fclose(sourceFile);  // Close the source file if destination file can't be opened
+    if ((dest_fd = open("filecopy.txt", O_WRONLY | O_CREAT, S_IRUSR)) < 0) {
+        perror("open destination file");
         exit(1);
     }
 
-    // Copy the content character by character from source to destination
-    while ((ch = fgetc(sourceFile)) != EOF) {
-        fputc(ch, destFile);
+     while ((nbytes = read(fd, buf, sizeof(buf))) > 0) {
+        if (write(dest_fd, buf, nbytes) != nbytes) {
+            perror("write");
+            exit(1);
+        }
     }
 
-    // Close the files
-    fclose(sourceFile);
-    fclose(destFile);
+    if (nbytes < 0) {  
+        exit(1);
+    }
+
+    
+    close(fd);
+    close(dest_fd);
 
     printf("File copied successfully.\n");
+
     return 0;
 }
